@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="button_title">Add to favourites</string>
+    <string name="button_title_weather">Weather</string>
+    <string name="error">Error</string>
+    <string name="reload">Reload</string>
+    <string name="button_title_Wind">Wind</string>
+    <string name="button_title_rain">Rain</string>
+    <string name="button_title_sys">SYS</string>
+    <string name="title_home">Home</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_app">Search weather by city name</string>
+    <string name="small_title_text">City</string>
+    <string name="load_text">load</string>
+
+</resources>
