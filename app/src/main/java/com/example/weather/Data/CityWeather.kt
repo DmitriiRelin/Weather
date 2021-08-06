@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class CityResponse(
+data class CityWeather(
 
     @SerializedName("main")
     @Expose

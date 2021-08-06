@@ -1,12 +1,9 @@
 package com.example.weatherapi.ViewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.weather.App.Companion.getFavoritesDao
-import com.example.weather.AppStateHomeFragment
-import com.example.weatherapi.Data.CityResponse
+import com.example.weather.ResponseResult
+import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Data.WeatherFavorite
 import com.example.weatherapi.Repository.RemoteDataSource
 import com.example.weatherapi.Repository.Repository
@@ -14,48 +11,49 @@ import com.example.weatherapi.Repository.RepositoryImpl
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val liveDataForViewToObserve: MutableLiveData<AppStateHomeFragment> = MutableLiveData(),
     private val repository: Repository = RepositoryImpl(RemoteDataSource(), getFavoritesDao())
 ) : ViewModel() {
 
+    private val _responseCityWeatherLiveData = MutableLiveData<ResponseResult<CityWeather>>()
+    val responseCityWeatherLiveData: LiveData<ResponseResult<CityWeather>> = _responseCityWeatherLiveData
 
-
-    fun getData(): LiveData<AppStateHomeFragment> {
-        return liveDataForViewToObserve
+    val cityWeatherLiveData = _responseCityWeatherLiveData.map{
+        if(it is ResponseResult.Success) it.cityWeather else null
     }
 
-//    fun loadData(city: String) {
-//        repository.getCityWeather(city)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                liveDataForViewToObserve.postValue(AppStateHomeFragment.Success(it))
-//            }, {
-//
-//            })
-//    }
+    val errorLiveData = _responseCityWeatherLiveData.map{
+        if(it is ResponseResult.Error)it.error else null
+    }
+
+    val isLoadingLiveData = _responseCityWeatherLiveData.map {
+        it is ResponseResult.Loading
+    }
+
+    private val _detailInfoVisibilityLiveData = MutableLiveData(false)
+    val detailInfoVisibilityLiveData:LiveData<Boolean> = _detailInfoVisibilityLiveData
+
+    fun changeDetailInfoVisibility(){
+        _detailInfoVisibilityLiveData.value = !(_detailInfoVisibilityLiveData.value ?: false)
+    }
+
 
     fun addToDB(){
-        val data = getData().value
-        if(data is AppStateHomeFragment.Success) {
-            repository.addWeather(convert(data.cityResponse))
+        val data = _responseCityWeatherLiveData.value
+        if(data is ResponseResult.Success) {
+            repository.addWeather(convert(data.cityWeather))
         }
-
     }
 
     fun loadData(city: String) {
         viewModelScope.launch {
            val res = repository.getCityWeather(city)
-            liveDataForViewToObserve.postValue(res.body()?.let { AppStateHomeFragment.Success(it) } ?: AppStateHomeFragment.Error(Throwable("Empty resp")))
+            // postValue используется при вызове из друго потока
+            _responseCityWeatherLiveData.value = (res.body()?.let { ResponseResult.Success(it) }
+                ?: ResponseResult.Error(Throwable("Empty resp")))
         }
     }
 
-    fun convert(city: CityResponse) : WeatherFavorite {
+    fun convert(city: CityWeather) : WeatherFavorite {
         return WeatherFavorite(city.main.temp, city.main.feelsLike, city.main.tempMin, city.main.tempMax, city.main.pressure, city.main.humidity, city.timezone, city.id, city.name )
     }
-
-
-
-
-
 }

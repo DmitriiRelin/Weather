@@ -1,6 +1,6 @@
 package com.example.weather.API
 
-import com.example.weatherapi.Data.CityResponse
+import com.example.weatherapi.Data.CityWeather
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -19,5 +19,5 @@ interface WeatherApi {
         @Query("q") q: String,
         @Query("appid") appid: String,
         @Query("units") units: String = "metric"
-    ): Response<CityResponse>
+    ): Response<CityWeather>
 }

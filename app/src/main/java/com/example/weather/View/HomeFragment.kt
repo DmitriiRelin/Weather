@@ -10,16 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.weather.AppStateHomeFragment
 import com.example.weather.R
+import com.example.weather.ResponseResult
 import com.example.weather.databinding.FragmentHomeBinding
-import com.example.weatherapi.Data.CityResponse
+import com.example.weatherapi.Data.CityWeather
+import com.example.weatherapi.Utils.makeSnackBar
 import com.example.weatherapi.Utils.showSnackBar
 import com.example.weatherapi.ViewModel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
 
-    private var weatherFlag: Boolean = false
+    private var snackbar: Snackbar? = null
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -38,22 +40,58 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.getData().observe(viewLifecycleOwner, {
-            renderData(it)
-        })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.editText.requestFocus()
+        setObservers()
+        setClickListeners()
+    }
 
+    private fun setObservers() {
+        viewModel.cityWeatherLiveData.observe(viewLifecycleOwner){cityWeater->
+            if (cityWeater != null){
+                binding.constrainLayout.visibility = View.VISIBLE
+                binding.mbWeather.visibility = View.VISIBLE
+                binding.btnAdd.visibility = View.VISIBLE
+                loadInfo(cityWeater)
+            } else{
+                binding.constrainLayout.visibility = View.GONE
+                binding.mbWeather.visibility = View.GONE
+                binding.btnAdd.visibility = View.GONE
+            }
+        }
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner){error->
+            if (error != null){
+                snackbar = binding.constrainLayout.makeSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    {
+                        val text = binding.editText.text.toString()
+                        viewModel.loadData(text)
+                    })
+                snackbar?.show()
+            } else
+                snackbar?.dismiss()
+        }
+
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner){isLoading->
+            if (isLoading)
+                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
+            else
+                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
+        }
+
+        viewModel.detailInfoVisibilityLiveData.observe(viewLifecycleOwner){isVisible->
+            binding.groupWeather.visibility = if (isVisible) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun setClickListeners() {
         binding.mbWeather.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.constrainLayout, Slide(Gravity.END))
-            weatherFlag = !weatherFlag
-            binding.groupWeather.visibility = if (weatherFlag) View.VISIBLE else View.GONE
+            viewModel.changeDetailInfoVisibility()
         }
 
 
@@ -71,38 +109,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-    private fun renderData(state: AppStateHomeFragment) {
-        when (state) {
-            is AppStateHomeFragment.Success -> {
-                binding.constrainLayout.visibility = View.VISIBLE
-                binding.mbWeather.visibility = View.VISIBLE
-                binding.btnAdd.visibility = View.VISIBLE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
-                loadInfo(state.cityResponse)
-            }
-            is AppStateHomeFragment.Loading -> {
-                binding.constrainLayout.visibility = View.GONE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
-            }
-            is AppStateHomeFragment.Error -> {
-                binding.constrainLayout.visibility = View.VISIBLE
-                binding.mbWeather.visibility = View.GONE
-                binding.btnAdd.visibility = View.GONE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
-                binding.constrainLayout.showSnackBar(
-                    getString(R.string.error),
-                    getString(R.string.reload),
-                    {
-                        val text = binding.editText.text.toString()
-                        viewModel.loadData(text)
-                    })
-            }
-        }
-    }
-
-
-    private fun loadInfo(city: CityResponse) {
+    private fun loadInfo(city: CityWeather) {
         binding.tvWeatherTemp.text = "TEMP: ${city.main?.temp}"
         binding.tvWeatherFeelsLike.text = "FEELS LIKE: ${city.main?.feelsLike}"
         binding.tvWeatherTempMin.text = "TEMP MIN: ${city.main?.tempMin}"
