@@ -11,12 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.weather.R
-import com.example.weather.ResponseResult
 import com.example.weather.databinding.FragmentHomeBinding
-import com.example.weatherapi.Data.CityWeather
+import com.example.weather.viewmodel.HomeViewModel
 import com.example.weatherapi.Utils.makeSnackBar
-import com.example.weatherapi.Utils.showSnackBar
-import com.example.weatherapi.ViewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
@@ -36,7 +33,11 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
+            viewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+
         return binding.root
     }
 
@@ -49,19 +50,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.cityWeatherLiveData.observe(viewLifecycleOwner){cityWeater->
-            if (cityWeater != null){
-                binding.constrainLayout.visibility = View.VISIBLE
-                binding.mbWeather.visibility = View.VISIBLE
-                binding.btnAdd.visibility = View.VISIBLE
-                loadInfo(cityWeater)
-            } else{
-                binding.constrainLayout.visibility = View.GONE
-                binding.mbWeather.visibility = View.GONE
-                binding.btnAdd.visibility = View.GONE
-            }
-        }
-
         viewModel.errorLiveData.observe(viewLifecycleOwner){error->
             if (error != null){
                 snackbar = binding.constrainLayout.makeSnackBar(
@@ -82,10 +70,6 @@ class HomeFragment : Fragment() {
             else
                 binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
         }
-
-        viewModel.detailInfoVisibilityLiveData.observe(viewLifecycleOwner){isVisible->
-            binding.groupWeather.visibility = if (isVisible) View.VISIBLE else View.GONE
-        }
     }
 
     private fun setClickListeners() {
@@ -104,23 +88,7 @@ class HomeFragment : Fragment() {
                 viewModel.loadData(text)
             }
         }
-        binding.btnAdd.setOnClickListener {
-            viewModel.addToDB()
-        }
     }
-
-    private fun loadInfo(city: CityWeather) {
-        binding.tvWeatherTemp.text = "TEMP: ${city.main?.temp}"
-        binding.tvWeatherFeelsLike.text = "FEELS LIKE: ${city.main?.feelsLike}"
-        binding.tvWeatherTempMin.text = "TEMP MIN: ${city.main?.tempMin}"
-        binding.tvWeatherTempMax.text = "TEMP MAX: ${city.main?.tempMax}"
-        binding.tvWeatherPressure.text = "PRESSURE: ${city.main?.pressure}"
-        binding.tvWeatherHumidity.text = "HUMIDITY: ${city.main?.pressure}"
-        binding.tvName.text = city.name
-        binding.tvLat.text = "LAT: ${city.coord?.lat.toString()}"
-        binding.tvLon.text = "LON: ${city.coord?.lon.toString()}"
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()

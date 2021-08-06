@@ -1,6 +1,6 @@
 package com.example.weatherapi.Repository
 
-import com.example.weather.API.WeatherApi
+import com.example.weather.api.WeatherApi
 import com.example.weather.BuildConfig
 import com.example.weatherapi.Utils.BASE_URL
 import com.google.gson.GsonBuilder

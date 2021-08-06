@@ -1,4 +1,4 @@
-package com.example.weatherapi.ViewModel
+package com.example.weather.viewmodel
 
 import androidx.lifecycle.*
 import com.example.weather.App.Companion.getFavoritesDao
