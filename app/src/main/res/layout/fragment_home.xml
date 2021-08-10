@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.example.weather.viewmodel.HomeViewModel" />
     </data>
 
@@ -82,7 +82,7 @@
                 android:id="@+id/constrain_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:goneIfNull="@{viewModel.cityWeatherLiveData}">
+                app:goneIfNull="@{vm.cityWeatherLiveData}">
 
 
                 <TextView
@@ -90,7 +90,7 @@
                     style="@style/textView_title_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.cityWeatherLiveData.name}"
+                    android:text="@{vm.cityWeatherLiveData.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +100,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.coord.lon)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.coord.lon)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -110,7 +110,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.coord.lat)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.coord.lat)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_lon" />
@@ -124,7 +124,7 @@
                     android:text="@string/button_title_weather"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:goneIfNull="@{viewModel.cityWeatherLiveData}"
+                    app:goneIfNull="@{vm.cityWeatherLiveData}"
                     app:layout_constraintTop_toBottomOf="@+id/tv_lat" />
 
                 <TextView
@@ -132,7 +132,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.temp)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.temp)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mb_weather" />
@@ -143,7 +143,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.feelsLike)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.feelsLike)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weather_temp" />
@@ -153,7 +153,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.tempMin)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.tempMin)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weather_feels_like" />
@@ -163,7 +163,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.tempMax)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.tempMax)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weather_temp_min" />
@@ -173,7 +173,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.pressure)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.pressure)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weather_temp_max" />
@@ -183,7 +183,7 @@
                     style="@style/textView_description_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Double.toString(viewModel.cityWeatherLiveData.main.humidity)}"
+                    android:text="@{Double.toString(vm.cityWeatherLiveData.main.humidity)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weather_pressure" />
@@ -193,7 +193,7 @@
                     android:id="@+id/group_weather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:visibleIfTrue="@{viewModel.detailInfoVisibilityLiveData}"
+                    app:visibleIfTrue="@{vm.detailInfoVisibilityLiveData}"
                     app:constraint_referenced_ids="tv_weather_temp, tv_weather_temp_min, tv_weather_feels_like, tv_weather_temp_max, tv_weather_pressure, tv_weather_humidity" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -207,8 +207,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/medium_margin"
             android:backgroundTint="@color/medium_background_button"
-            app:goneIfNull="@{viewModel.cityWeatherLiveData}"
-            android:onClick="@{() -> viewModel.addToDB()}"
+            app:goneIfNull="@{vm.cityWeatherLiveData}"
+            android:onClick="@{() -> vm.addToDB()}"
             android:text="@string/button_title"
             android:textColor="@color/medium_pink_text_color_button"
             app:layout_constraintBottom_toBottomOf="parent"

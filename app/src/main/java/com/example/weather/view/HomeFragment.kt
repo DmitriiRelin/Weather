@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
-            viewModel = viewModel
+            vm = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
 
