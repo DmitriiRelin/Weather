@@ -1,6 +1,6 @@
 package com.example.weatherapi.Repository
 
-import com.example.weatherapi.Data.CityResponse
+import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Data.WeatherFavorite
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +13,7 @@ class RepositoryImpl(
     private val localDataSource: FavoriteDao
 ) : Repository {
 
-    override suspend fun getCityWeather(city: String): Response<CityResponse> =
+    override suspend fun getCityWeather(city: String): Response<CityWeather> =
         remoteDataSource.getCityWeather(city)
 
     override fun addWeather(weatherFavorite: WeatherFavorite) {
