@@ -12,7 +12,7 @@ interface Repository {
 
     fun addWeather(weatherFavorite: WeatherFavorite)
 
-    suspend fun getListWeather(): List<WeatherFavorite>
+    suspend fun getFavoriteListWeather(): List<WeatherFavorite>
 
     fun deleteFavorite(city: WeatherFavorite)
 

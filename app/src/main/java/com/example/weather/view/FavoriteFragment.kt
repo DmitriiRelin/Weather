@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weather.AppStateFavoritesFragment
 import com.example.weather.R
 import com.example.weather.databinding.FragmentFavoriteBinding
+import com.example.weatherapi.Utils.makeSnackBar
 import com.example.weatherapi.Utils.showSnackBar
 import com.example.weatherapi.View.RecyclerView.FavoritesAdapter
 import com.example.weatherapi.ViewModel.FavoritesViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class FavoriteFragment : Fragment() {
@@ -23,6 +25,7 @@ class FavoriteFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var favoritesAdapter = FavoritesAdapter()
+    private var snackbar: Snackbar? = null
 
     private val viewModel: FavoritesViewModel by lazy {
         ViewModelProvider(this).get(FavoritesViewModel::class.java)
@@ -62,39 +65,37 @@ class FavoriteFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         return binding.root
-
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.getData().observe(viewLifecycleOwner, {
-            renderData(it)
-        })
-    }
-
-    private fun renderData(state: AppStateFavoritesFragment) {
-        when (state) {
-            is AppStateFavoritesFragment.Success -> {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.favoriteWeatherListLiveData.observe(viewLifecycleOwner){favoriteList->
+            if (favoriteList != null){
                 binding.recyclerView.visibility = View.VISIBLE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
-                favoritesAdapter.favoritesList = state.cityResponse
-            }
-            is AppStateFavoritesFragment.Loading -> {
+                favoritesAdapter.favoritesList = favoriteList
+            } else
                 binding.recyclerView.visibility = View.GONE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
-            }
-            is AppStateFavoritesFragment.Error -> {
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
-                binding.recyclerView.showSnackBar(
+        }
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner){isLoading->
+            binding.includedLoadingLayout.loadingLayout.visibility = if (isLoading)
+                View.VISIBLE
+            else
+                View.GONE
+        }
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner){error->
+            if (error != null){
+                snackbar = binding.recyclerView.makeSnackBar(
                     getString(R.string.error),
                     getString(R.string.reload),
                     {
                         viewModel.getList()
                     })
-
-            }
+                snackbar?.show()
+            } else
+                snackbar?.dismiss()
         }
+
     }
 
     override fun onDestroy() {
