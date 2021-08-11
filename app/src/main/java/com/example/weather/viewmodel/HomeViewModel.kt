@@ -1,17 +1,16 @@
 package com.example.weather.viewmodel
 
 import androidx.lifecycle.*
-import com.example.weather.App
 import com.example.weather.ResponseResult
 import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Data.WeatherFavorite
-import com.example.weatherapi.Repository.IRemoteDataSource
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
 import com.example.weatherapi.Repository.RemoteDataSource
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(
-    val remoteDataSource: IRemoteDataSource,
+class HomeViewModel @Inject constructor(
+    val remoteDataSource: RemoteDataSource,
     val dao:FavoriteDao
 ) : ViewModel() {
 

@@ -12,14 +12,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FakeDataSource: IRemoteDataSource{
-    override suspend fun getCityWeather(city: String): Response<CityWeather> {
-        TODO()
-    }
-}
-class RemoteDataSource : IRemoteDataSource {
-
+@Singleton
+class RemoteDataSource @Inject constructor() {
     private val weatherApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(
@@ -32,7 +29,7 @@ class RemoteDataSource : IRemoteDataSource {
 
 
     //fun getCityWeather(city: String) = weatherApi.getCityWeather(city, BuildConfig.WEATHER_API_KEY)
-    override suspend fun getCityWeather(city: String) =
+    suspend fun getCityWeather(city: String) =
         weatherApi.getCityWeather(city, BuildConfig.WEATHER_API_KEY)
 
 

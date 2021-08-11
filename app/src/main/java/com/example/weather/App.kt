@@ -6,9 +6,10 @@ import com.example.weatherapi.Repository.FakeDataSource
 import com.example.weatherapi.Repository.LocalRep.FavoriteDB
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
 import com.example.weatherapi.Repository.RemoteDataSource
+import dagger.hilt.android.HiltAndroidApp
 
 
-//Service Locator
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
@@ -38,7 +39,7 @@ class App : Application() {
             }
             return db!!.favoriteDao()
         }
-        private val remoteDataSource = FakeDataSource()
-        fun getRemoteDataSource() = remoteDataSource
+        /*private val remoteDataSource = RemoteDataSource()
+        fun getRemoteDataSource() = remoteDataSource*/
     }
 }
