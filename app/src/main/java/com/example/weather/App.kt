@@ -2,9 +2,13 @@ package com.example.weather
 
 import android.app.Application
 import androidx.room.Room
+import com.example.weatherapi.Repository.FakeDataSource
 import com.example.weatherapi.Repository.LocalRep.FavoriteDB
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
+import com.example.weatherapi.Repository.RemoteDataSource
 
+
+//Service Locator
 class App : Application() {
 
     override fun onCreate() {
@@ -34,5 +38,7 @@ class App : Application() {
             }
             return db!!.favoriteDao()
         }
+        private val remoteDataSource = FakeDataSource()
+        fun getRemoteDataSource() = remoteDataSource
     }
 }

@@ -2,16 +2,23 @@ package com.example.weatherapi.Repository
 
 import com.example.weather.api.WeatherApi
 import com.example.weather.BuildConfig
+import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Utils.BASE_URL
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class RemoteDataSource {
+class FakeDataSource: IRemoteDataSource{
+    override suspend fun getCityWeather(city: String): Response<CityWeather> {
+        TODO()
+    }
+}
+class RemoteDataSource : IRemoteDataSource {
 
     private val weatherApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -25,7 +32,7 @@ class RemoteDataSource {
 
 
     //fun getCityWeather(city: String) = weatherApi.getCityWeather(city, BuildConfig.WEATHER_API_KEY)
-    suspend fun getCityWeather(city: String) =
+    override suspend fun getCityWeather(city: String) =
         weatherApi.getCityWeather(city, BuildConfig.WEATHER_API_KEY)
 
 
