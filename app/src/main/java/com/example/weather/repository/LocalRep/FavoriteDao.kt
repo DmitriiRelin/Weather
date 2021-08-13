@@ -16,3 +16,19 @@ interface FavoriteDao {
     suspend fun delete(city: WeatherFavorite)
 
 }
+
+
+class FakeFavoriteDao: FavoriteDao{
+    override suspend fun allWeather(): List<WeatherFavorite> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insert(city: WeatherFavorite) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(city: WeatherFavorite) {
+        TODO("Not yet implemented")
+    }
+
+}

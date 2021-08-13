@@ -15,7 +15,9 @@ import com.example.weather.databinding.FragmentHomeBinding
 import com.example.weather.viewmodel.HomeViewModel
 import com.example.weatherapi.Utils.makeSnackBar
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var snackbar: Snackbar? = null
 

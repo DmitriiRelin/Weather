@@ -1,17 +1,21 @@
 package com.example.weather.viewmodel
 
 import androidx.lifecycle.*
+import com.example.di.FakeImpl
+import com.example.di.RoomImpl
 import com.example.weather.ResponseResult
 import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Data.WeatherFavorite
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
 import com.example.weatherapi.Repository.RemoteDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
     val remoteDataSource: RemoteDataSource,
-    val dao:FavoriteDao
+    @RoomImpl val dao:FavoriteDao
 ) : ViewModel() {
 
     private val _responseCityWeatherLiveData = MutableLiveData<ResponseResult<CityWeather>>()

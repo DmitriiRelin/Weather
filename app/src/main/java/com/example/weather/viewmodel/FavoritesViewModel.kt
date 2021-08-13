@@ -1,18 +1,22 @@
 package com.example.weatherapi.ViewModel
 
 import androidx.lifecycle.*
+import com.example.di.RoomImpl
 import com.example.weather.App
 import com.example.weather.ResponseResult
 import com.example.weatherapi.Data.WeatherFavorite
+import com.example.weatherapi.Repository.LocalRep.FavoriteDao
 import com.example.weatherapi.Repository.RemoteDataSource
 import com.example.weatherapi.Repository.Repository
 import com.example.weatherapi.Repository.RepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import javax.inject.Inject
 
-
-class FavoritesViewModel(
-    private val repository: Repository = RepositoryImpl(RemoteDataSource(), App.getFavoritesDao())
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    @RoomImpl val favoriteDao: FavoriteDao
 ) : ViewModel() {
 
     private val _favoritesResponseLiveData = MutableLiveData<ResponseResult<List<WeatherFavorite>>>()
@@ -33,7 +37,7 @@ class FavoritesViewModel(
         viewModelScope.launch {
             _favoritesResponseLiveData.value = ResponseResult.Loading(null)
             try{
-            val list = repository.getFavoriteListWeather()
+            val list = favoriteDao.allWeather()
                 _favoritesResponseLiveData.value = ResponseResult.Success(list)
             } catch (e: Exception){
                 _favoritesResponseLiveData.value = ResponseResult.Error(e)
@@ -44,10 +48,10 @@ class FavoritesViewModel(
     fun deleteFavorite(pos: Int) {
         val state = _favoritesResponseLiveData.value
         if(state is ResponseResult.Success){
-            repository.deleteFavorite(state.data[pos])
-            getList()
+            viewModelScope.launch {
+                favoriteDao.delete(state.data[pos])
+                getList()
+            }
         }
-
     }
-
 }

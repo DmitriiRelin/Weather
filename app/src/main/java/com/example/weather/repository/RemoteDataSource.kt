@@ -15,8 +15,12 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+class Some @Inject constructor(){
+
+}
+
 @Singleton
-class RemoteDataSource @Inject constructor() {
+class RemoteDataSource @Inject constructor(val some: Some) {
     private val weatherApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(
