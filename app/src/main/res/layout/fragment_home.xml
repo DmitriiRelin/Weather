@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:errorEnabled="true"
+            app:error = "@{vm.inputError}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_small_title">
@@ -53,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textColor="@color/white"
+                android:text="@={vm.userInputLiveData}"
                 android:textCursorDrawable="@drawable/cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -64,6 +66,7 @@
             android:layout_height="wrap_content"
             android:text="@string/load_text"
             android:textColor="@color/white"
+            android:onClick="@{()-> vm.loadData()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_input_layout" />
@@ -122,6 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/button_title_weather"
+                    android:onClick="@{()->vm.changeDetailInfoVisibility()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:goneIfNull="@{vm.cityWeatherLiveData}"
@@ -217,7 +221,8 @@
 
         <include
             android:id="@+id/includedLoadingLayout"
-            layout="@layout/loading_layout" />
+            layout="@layout/loading_layout"
+            app:isVisible = "@{vm.isLoadingLiveData()}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

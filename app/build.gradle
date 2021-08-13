@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -91,6 +92,10 @@ dependencies {
 
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
+
+    //hilt
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:$room_version")

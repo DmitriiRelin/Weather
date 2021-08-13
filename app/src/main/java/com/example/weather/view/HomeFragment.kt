@@ -1,14 +1,14 @@
 package com.example.weatherapi.View
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.transition.Slide
 import android.transition.TransitionManager
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.weather.R
 import com.example.weather.databinding.FragmentHomeBinding
@@ -17,16 +17,16 @@ import com.example.weatherapi.Utils.makeSnackBar
 import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
-
     private var snackbar: Snackbar? = null
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider(this).get(HomeViewModel::class.java)
-    }
+//    private val viewModel: HomeViewModel by lazy {
+//        ViewModelProvider(this).get(HomeViewModel::class.java)
+//    }
 
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +37,6 @@ class HomeFragment : Fragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
         return binding.root
     }
 
@@ -46,7 +45,6 @@ class HomeFragment : Fragment() {
 
         binding.editText.requestFocus()
         setObservers()
-        setClickListeners()
     }
 
     private fun setObservers() {
@@ -56,37 +54,15 @@ class HomeFragment : Fragment() {
                     getString(R.string.error),
                     getString(R.string.reload),
                     {
-                        val text = binding.editText.text.toString()
-                        viewModel.loadData(text)
+                        viewModel.loadData()
                     })
                 snackbar?.show()
             } else
                 snackbar?.dismiss()
         }
 
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner){isLoading->
-            if (isLoading)
-                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
-            else
-                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
-        }
-    }
-
-    private fun setClickListeners() {
-        binding.mbWeather.setOnClickListener {
+        viewModel.detailInfoVisibilityLiveData.observe(viewLifecycleOwner){
             TransitionManager.beginDelayedTransition(binding.constrainLayout, Slide(Gravity.END))
-            viewModel.changeDetailInfoVisibility()
-        }
-
-
-        binding.load.setOnClickListener {
-            if (TextUtils.isEmpty(binding.editText.text)) {
-                binding.textInputLayout.error = "EMPTY"
-            } else {
-                binding.textInputLayout.error = ""
-                val text = binding.editText.text.toString()
-                viewModel.loadData(text)
-            }
         }
     }
 
@@ -94,5 +70,6 @@ class HomeFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
 
 }

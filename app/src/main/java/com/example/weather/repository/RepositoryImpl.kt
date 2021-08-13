@@ -22,7 +22,7 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun getListWeather(): List<WeatherFavorite> {
+    override suspend fun getFavoriteListWeather(): List<WeatherFavorite> {
         return localDataSource.allWeather()
     }
 
