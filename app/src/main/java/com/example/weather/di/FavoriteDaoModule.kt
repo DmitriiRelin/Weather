@@ -1,12 +1,10 @@
-package com.example.di
+package com.example.weather.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.weather.App
 import com.example.weatherapi.Repository.LocalRep.FakeFavoriteDao
 import com.example.weatherapi.Repository.LocalRep.FavoriteDB
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
-import com.example.weatherapi.Repository.Some
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

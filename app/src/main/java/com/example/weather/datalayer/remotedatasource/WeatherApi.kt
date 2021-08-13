@@ -1,4 +1,4 @@
-package com.example.weather.api
+package com.example.weather.datalayer.remotedatasource
 
 import com.example.weatherapi.Data.CityWeather
 import retrofit2.Response

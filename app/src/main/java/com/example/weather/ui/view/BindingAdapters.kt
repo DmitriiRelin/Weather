@@ -1,4 +1,4 @@
-package com.example.weather.view
+package com.example.weather.ui.view
 
 import android.view.View
 import androidx.databinding.BindingAdapter

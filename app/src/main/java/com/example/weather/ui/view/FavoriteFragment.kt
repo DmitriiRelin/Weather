@@ -9,11 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.AppStateFavoritesFragment
 import com.example.weather.R
 import com.example.weather.databinding.FragmentFavoriteBinding
 import com.example.weatherapi.Utils.makeSnackBar
-import com.example.weatherapi.Utils.showSnackBar
 import com.example.weatherapi.View.RecyclerView.FavoritesAdapter
 import com.example.weatherapi.ViewModel.FavoritesViewModel
 import com.google.android.material.snackbar.Snackbar

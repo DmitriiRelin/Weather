@@ -1,21 +1,21 @@
-package com.example.weather.viewmodel
+package com.example.weather.ui.viewmodel
 
 import androidx.lifecycle.*
-import com.example.di.FakeImpl
-import com.example.di.RoomImpl
-import com.example.weather.ResponseResult
+import com.example.weather.domain.usecases.AddToFavoriteUseCase
+import com.example.weather.domain.usecases.GetCityByNameUseCase
+import com.example.weather.domain.usecases.RemoveFromFavoriteUseCase
+import com.example.weather.utils.ResponseResult
 import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Data.WeatherFavorite
-import com.example.weatherapi.Repository.LocalRep.FavoriteDao
-import com.example.weatherapi.Repository.RemoteDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val remoteDataSource: RemoteDataSource,
-    @RoomImpl val dao:FavoriteDao
+    val addToFavoriteUseCase: AddToFavoriteUseCase,
+    val getCityByNameUseCase: GetCityByNameUseCase,
+    val removeFromFavoriteUseCase: RemoveFromFavoriteUseCase
 ) : ViewModel() {
 
     private val _responseCityWeatherLiveData = MutableLiveData<ResponseResult<CityWeather>>()
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
         val data = _responseCityWeatherLiveData.value
         if(data is ResponseResult.Success) {
             viewModelScope.launch {
-                dao.insert(convert(data.data))
+                addToFavoriteUseCase(data.data)
             }
 
         }

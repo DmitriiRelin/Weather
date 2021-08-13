@@ -1,14 +1,10 @@
 package com.example.weatherapi.ViewModel
 
 import androidx.lifecycle.*
-import com.example.di.RoomImpl
-import com.example.weather.App
-import com.example.weather.ResponseResult
+import com.example.weather.di.RoomImpl
+import com.example.weather.utils.ResponseResult
 import com.example.weatherapi.Data.WeatherFavorite
 import com.example.weatherapi.Repository.LocalRep.FavoriteDao
-import com.example.weatherapi.Repository.RemoteDataSource
-import com.example.weatherapi.Repository.Repository
-import com.example.weatherapi.Repository.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
