@@ -1,6 +1,4 @@
-package com.example.weather
-
-import com.example.weatherapi.Data.WeatherFavorite
+package com.example.weather.utils
 
 sealed class ResponseResult<out R> {
     data class Success<T>(val data: T) : ResponseResult<T>()

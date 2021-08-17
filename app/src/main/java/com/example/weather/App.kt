@@ -1,45 +1,40 @@
 package com.example.weather
 
 import android.app.Application
-import androidx.room.Room
-import com.example.weatherapi.Repository.FakeDataSource
-import com.example.weatherapi.Repository.LocalRep.FavoriteDB
-import com.example.weatherapi.Repository.LocalRep.FavoriteDao
-import com.example.weatherapi.Repository.RemoteDataSource
 import dagger.hilt.android.HiltAndroidApp
 
 
 @HiltAndroidApp
-class App : Application() {
+class App : Application()
 
-    override fun onCreate() {
-        super.onCreate()
-        appInstance = this
-    }
 
-    companion object {
+//
+//первый экран:
+//1. получать погоду в городе по его названию
+//2. добавлять в избранное
+//3. удалять из избранного
+//4. желтая или серая зведочка (если избранный или нет)
+//
+//второй экран:
+//1. список избранных городов с текущей погодой
+//2. удалять из избранного
+//
+//-у города нужны: название, координаты (потом хочу карту), погода
+//-погода это температура, влажность, давление
+//-в избранном максимум пять городов
+//-в будущем иметь возможность получать погоду с разных api
 
-        private var appInstance: App? = null
-        private var db: FavoriteDB? = null
-        private const val DB_NAME = "Favorite.db"
+//UseCases
+//GetCityByName
+//AddCityToFavorite(max 5 city)
+//RemoveFromFavorite
+//GetCitiesFromFavorite
+//Entities
 
-        fun getFavoritesDao(): FavoriteDao {
-            if (db == null) {
-                synchronized(FavoriteDB::class.java) {
-                    if (db == null) {
-                        if (appInstance == null) throw IllegalStateException("Application is null while creating DataBase")
-                        db = Room.databaseBuilder(
-                            appInstance!!.applicationContext,
-                            FavoriteDB::class.java,
-                            DB_NAME
-                        )
-                            .build()
-                    }
-                }
-            }
-            return db!!.favoriteDao()
-        }
-        /*private val remoteDataSource = RemoteDataSource()
-        fun getRemoteDataSource() = remoteDataSource*/
-    }
-}
+
+
+
+
+
+
+

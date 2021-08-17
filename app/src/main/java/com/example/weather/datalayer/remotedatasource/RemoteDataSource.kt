@@ -1,22 +1,24 @@
 package com.example.weatherapi.Repository
 
-import com.example.weather.api.WeatherApi
+import com.example.weather.datalayer.remotedatasource.WeatherApi
 import com.example.weather.BuildConfig
-import com.example.weatherapi.Data.CityWeather
 import com.example.weatherapi.Utils.BASE_URL
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+class Some @Inject constructor(){
+
+}
+
 @Singleton
-class RemoteDataSource @Inject constructor() {
+class RemoteDataSource @Inject constructor(val some: Some) {
     private val weatherApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(

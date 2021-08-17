@@ -9,16 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.AppStateFavoritesFragment
 import com.example.weather.R
 import com.example.weather.databinding.FragmentFavoriteBinding
 import com.example.weatherapi.Utils.makeSnackBar
-import com.example.weatherapi.Utils.showSnackBar
 import com.example.weatherapi.View.RecyclerView.FavoritesAdapter
 import com.example.weatherapi.ViewModel.FavoritesViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null
@@ -69,6 +68,7 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getList()
         viewModel.favoriteWeatherListLiveData.observe(viewLifecycleOwner){favoriteList->
             if (favoriteList != null){
                 binding.recyclerView.visibility = View.VISIBLE
